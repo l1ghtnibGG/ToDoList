@@ -1,0 +1,16 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@model IQueryable<ToDoList>
+
+<h2>Задачи на сегодня</h2>
+
+@foreach(var x in Model)
+{
+    <div class="item">
+    <h3>@x.Name</h3>
+    </div>
+
+    <button class=""></button>
+}
