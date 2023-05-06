@@ -1,0 +1,74 @@
+*{
+    font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.editPanel{
+    display: table;
+    width: 60%;
+    border-spacing: 5pt 5pt;
+    margin: 0px auto;
+}
+
+label{
+    display: table-cell;
+    text-align: start;
+    font-size: 25pt;
+}
+
+.nameField, .createDateField,
+ .finishDateField, .descriptionField {
+    display: table-cell;
+    padding: 0 2pt;
+    font-size: 15pt;
+}
+
+.donePanel, .namePanel,
+ .createDatePanel, .finishDatePanel, .descriptionPanel{
+    display: table-row;
+
+}
+
+.isDoneField{
+    transform: scale(1.5);
+}
+
+.editButton{
+    display: block;
+    width: 20%;
+    text-align: center;
+    margin: 15pt auto;
+    padding: 2pt 2pt;
+    background-color: rgba(1, 99, 74);
+    color: white;
+    font-weight: 600;
+    font-size: 13pt;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 2px 4px darkslategray;
+    transition: 0.3s;
+}
+
+.editButton:active{
+    box-shadow: 0 0 2px darkslategray;
+    transform: translateY(1px);
+}
+
+.editButton:hover{
+    background-color: rgb(3, 146, 110);
+}
+
+@media screen and (max-width: 500px){
+    h1{
+        font-size: 20pt;
+    }
+    label{
+        font-size: 15pt;
+    }
+    .nameField, .createDateField,
+    .finishDateField, .descriptionField {
+       font-size: 10pt;
+   }
+    
+}

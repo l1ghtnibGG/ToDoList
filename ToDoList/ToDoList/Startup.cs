@@ -6,10 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileSystemGlobbing.Internal.Patterns;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using ToDoList_Mvc_UI.Models;
 using ToDoList_Mvc_UI.Models.Repo;
 
@@ -26,6 +28,7 @@ namespace ToDoList_Mvc_UI
             services.AddDbContext<ToDoListDbContext>(opts =>
             {
                 opts.UseSqlServer(Configuration.GetConnectionString("ToDoListConnection"));
+                opts.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
             services.AddScoped<IToDoListRepository, EFToDoListRepository>();
@@ -45,6 +48,9 @@ namespace ToDoList_Mvc_UI
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute("editPage",
+                    "Edit/{id:long}",
+                    new { controller = "Home", action = "EditPage", id = 0 });
                 endpoints.MapControllerRoute("default",
                     pattern: "{controller=Home}/{action=Index}");
             });

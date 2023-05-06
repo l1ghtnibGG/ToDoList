@@ -4,13 +4,74 @@
 
 @model IQueryable<ToDoList>
 
-<h2>Задачи на сегодня</h2>
+<div class="addBox">
+    <form asp-controller="Home" asp-action="AddItem" method="post" id="formAdd">
+        
+        <input type="text" name="toDoList.Name" id="addInput" class="addInput" required min="1" placeholder="Add" />
+        
+        <div class="addPanel">
+            <button class="addButton">Add</button>
+                <input type="date" name="toDoList.DueDate" id="currentDate" class="currentDate"
+                min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+        </div>
+    </form>
+</div>
+
+<h2>Tasks for today</h2>
 
 @foreach(var x in Model)
 {
-    <div class="item">
-    <h3>@x.Name</h3>
-    </div>
+    @if(!x.IsDone){
+        <div class="item">
+            <form method="get" asp-controller="Home" asp-action="EditPage" class="formItem">
+                <input type="hidden" name="id" value="@x.Id"/>
+                <input type="hidden" name="toDoList.Name" value="@x.Name" />
+                <input type="hidden" name="toDoList.IsDone" value="@x.IsDone" />
+                <input type="hidden" name="toDoList.CreateDate" value="@x.CreateDate.ToString("yyyy-MM-dd")" />
+                <input type="hidden" name="toDoList.DueDate" value="@x.DueDate.ToString("yyyy-MM-dd")" />
+                <input type="hidden" name="toDoList.Description" value="@x.Description" />
 
-    <button class=""></button>
+                <button class="editItem">@x.Name</button>
+            </form>
+            <form method="post" asp-controller="Home" asp-action="ToggleIsDone" class="isDonePanel">
+                <input type="hidden" name="id" value="@x.Id" />
+                <button class="isDoneButton">&#10003</button>
+            </form>
+            <form method="post" asp-controller="Home" asp-action="DeleteItem">
+                <input type="hidden" name="id" value="@x.Id" />
+                <button class="deleteItem" >delete</button>
+            </form>
+        </div>
+    }
 }
+
+<button id="dropDoneList" onclick="hideDoneItem(this.id)">Done @Model.Where(x => x.IsDone).Count()</button>
+
+<div class="hiddenItemsList" id="hiddenItemsList">
+@foreach (var x in Model)
+{
+    @if (x.IsDone)
+    {
+        <div class="item">
+            <form method="get" asp-controller="Home" asp-action="EditPage" class="formItem">
+                <input type="hidden" name="id" value="@x.Id" />
+                <input type="hidden" name="toDoList.Name" value="@x.Name" />
+                <input type="hidden" name="toDoList.IsDone" value="@x.IsDone" />
+                <input type="hidden" name="toDoList.CreateDate" value="@x.CreateDate.ToString("yyyy-MM-dd")" />
+                <input type="hidden" name="toDoList.DueDate" value="@x.DueDate.ToString("yyyy-MM-dd")" />
+                <input type="hidden" name="toDoList.Description" value="@x.Description" />
+
+                <button class="editItem">@x.Name</button>
+            </form>
+            <form method="post" asp-controller="Home" asp-action="ToggleIsDone" class="isDonePanel">
+                <input type="hidden" name="id" value="@x.Id" />
+                <button class="alreadyDoneButton">&#10003</button>
+            </form>
+            <form method="post" asp-controller="Home" asp-action="DeleteItem">
+                <input type="hidden" name="id" value="@x.Id" />
+                <button class="deleteItem">delete</button>
+            </form>
+        </div>
+    }
+}
+</div>

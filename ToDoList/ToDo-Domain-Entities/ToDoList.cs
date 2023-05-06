@@ -13,5 +13,11 @@ namespace ToDo_Domain_Entities
         public string Name { get; set; }
         
         public bool IsDone { get; set; }
+
+        public DateTime CreateDate { get; set; }
+
+        public DateTime DueDate { get; set; }
+
+        public string Description { get; set; }
     }
 }

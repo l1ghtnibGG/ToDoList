@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using ToDo_Domain_Entities;
 
 namespace ToDoList_Mvc_UI.Models
@@ -23,22 +24,34 @@ namespace ToDoList_Mvc_UI.Models
                     new ToDoList
                     {
                         Name = "Run",
-                        IsDone = false
+                        IsDone = false,
+                        CreateDate = DateTime.Now,
+                        DueDate = DateTime.Now,
+                        Description = "running 20 min"
                     },
                     new ToDoList
                     {
                         Name = "Wake up",
-                        IsDone = true
+                        IsDone = true,
+                        CreateDate = DateTime.Now,
+                        DueDate = DateTime.Now.AddDays(1),
+                        Description = "wake up at 7am"
                     },
                     new ToDoList
                     {
                         Name = "Hit the gym",
-                        IsDone = false
+                        IsDone = false,
+                        CreateDate = DateTime.Now,
+                        DueDate = DateTime.Now,
+                        Description = ""
                     },
                     new ToDoList
                     {
                         Name = "Reading",
-                        IsDone = false
+                        IsDone = true,
+                        CreateDate = DateTime.Now.AddDays(1),
+                        DueDate = DateTime.Now.AddDays(1),
+                        Description = "reading 10 pages"
                     });
 
                 context.SaveChanges();

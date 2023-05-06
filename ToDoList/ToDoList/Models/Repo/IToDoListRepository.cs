@@ -5,6 +5,14 @@ namespace ToDoList_Mvc_UI.Models.Repo
 {
     public interface IToDoListRepository
     {
-        IQueryable<ToDoList> ToDoLists { get; }
+        public IQueryable<ToDoList> ToDoLists { get; }
+
+        public ToDoList AddItem(ToDoList item);
+
+        public ToDoList UpdateItem(ToDoList item);
+
+        public long DeleteItem(long id);
+
+        public long UpdateDoneItem(long id);
     }
 }

@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='@Url.Content("~/css/homePage.css")' rel="stylesheet">
+    <link href='@Url.Content("~/css/editPage.css")' rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <title>SportStore</title>
 </head>
 <body>
@@ -20,5 +22,28 @@
         <hr>
         <p>&copy 2023 - Kruglikov Vlad - Privacy</p>
     </footer>
+<script>
+    $("isDoneButton").click(function () {
+      $(this).toggleClass("alreadyDoneButton");
+    }); 
+
+    window.onload = function() {
+        var show = localStorage.getItem('show');
+        if (show === 'true'){
+            document.getElementById('hiddenItemsList').style.display = 'flex';
+        }
+    }
+
+    function hideDoneItem(obj){
+        if (document.getElementById('hiddenItemsList').style.display == "flex"){
+            document.getElementById('hiddenItemsList').style.display = "none";
+             localStorage.setItem('show', 'false');
+        }
+        else{
+            document.getElementById('hiddenItemsList').style.display = "flex";
+             localStorage.setItem('show', 'true');
+        }
+    }
+</script>
 </body>
 </html>

@@ -7,16 +7,21 @@
 body{
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
 header{
-    background-color: rgb(38, 126, 104);
+    background-color: rgb(1, 99, 74);
     color: white;
     font-size: 35pt;
     font-weight: 600;
     text-align: left;
     padding: 10pt;
     letter-spacing: 2px;
+}
+
+main{
+    flex: 1 0 auto;
 }
 
 hr{
@@ -27,8 +32,8 @@ hr{
 }
 
 footer{
+    flex: 0 0 auto;
     font-size: 13pt;
-    position: absolute;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -52,27 +57,164 @@ h2{
     font-weight: 100;
 }
 
-.item {
+ #formAdd{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+ }
+
+ .addBox{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+ }
+
+ .addInput{
+    width: 80%;
+    height: 30pt;
+    padding: 5pt 5pt;
+    font-size: 20pt;
+    border-radius: 5px;
+    border: 1pt solid black;
+ }
+
+ .currentDate{
+    margin: 5pt 3pt;
+    padding: 3pt pt;
+    font-size: 13pt;
+ }
+
+ .addPanel{
+    display: flex;
+    padding: 10pt 0;
+    width: 80%;
+    justify-content: space-between;
+ }
+
+ .addButton{
+    font-size: 15pt;
+    padding: 3pt 3pt;
+ }
+
+ .formItem{
+    width: 100%;
+ }
+
+ .item {
     display: flex;
     flex-direction: row;
-    text-decoration: none;
-    color: black;
     margin: 5pt 0;
-    padding: 5pt 0;
     width: 80%;
     border: 1pt solid black;
     border-radius: 5px;
 }
 
-h3{
-    font-size: 20pt;
-    font-weight: 100;
-    text-transform: capitalize;
+#hiddenItemsList{
+   display: none;
+   flex-direction: column;
+   align-items: center;
+   width: 100%;
+   height: 100%;
 }
 
-.item:hover {
-    background-color: rgb(18, 201, 155);
+#dropDoneList{
+   margin: 10pt 5pt;
+   font-size: 20pt;
+   padding: 5pt 5pt;
+   background-color: rgb(1, 99, 74);
+   color: white;
+   border: none;
+   border-radius: 5px;
+}
+
+.editItem{
+    padding: 5pt 5pt;
+    height: 100%;
+    width: 100%;
+    font-size: 20pt;
+    background-color: white;
+    border-radius: 5px;
+    border: 0;
+    text-align: start;
+    text-transform: capitalize;
  }
+
+.editItem:hover {
+    background-color: rgba(175, 180, 174, 0.21);
+ }
+
+ .isDonePanel{
+    display: flex;
+    align-items: center;
+ }
+
+ .isDoneButton{
+    height: 80%;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255, 255, 255);
+    box-shadow: 0 1px 3px darkslategray;
+    font-size: 18pt;
+    transition: 0.3s;
+    color: rgb(255, 255, 255);
+    padding: 0 8pt;
+    margin: 0 2pt;
+ }
+
+ .isDoneButton:active{
+    box-shadow: 0 0 2px darkslategray;
+    transform: translateY(2px);
+ }
+
+ .isDoneButton:hover{
+    background-color: rgba(18, 201, 155, 0.589);
+    font-size: 20px;
+ }
+
+ .alreadyDoneButton{
+    height: 80%;
+    border: 0;
+    border-radius: 50%;
+    background: rebeccapurple;
+    box-shadow: 0 1px 3px darkslategray;
+    font-size: 18pt;
+    transition: 0.3s;
+    color: rgb(255, 255, 255);
+    padding: 0 8pt;
+    margin: 0 2pt;
+ }
+
+ .alreadyDoneButton:active{
+    box-shadow: 0 0 2px darkslategray;
+    transform: translateY(2px);
+ }
+
+ .alreadyDoneButton:hover{
+    background-color: rgb(144, 78, 209);
+    font-size: 20px;
+ }
+
+ .deleteItem{
+    padding: 5pt 5pt;
+    font-size: 15pt;
+    background-color: rgba(255, 87, 87, 0.295);
+    border: none;
+    border-radius: 5px;
+    height: 100%;
+    transition: 0.3s;
+ }
+
+ .deleteItem:active{
+    transform: translateY(1px);
+ }
+
+ .deleteItem:hover {
+    background-color: rgba(255, 87, 87, 0.180);
+    font-size: 19px;
+ }
+ 
 
  @media screen and (max-width: 500px) {
     header{
@@ -81,7 +223,25 @@ h3{
     h2{
         font-size: 18pt;
     }
-    h3{
+    .item{
+        width: 90%;
+    }
+    .addButton{
+        font-size: 13pt;
+        padding: 0 2pt;
+    }
+    .editItem{
+        font-size: 14pt;
+    }
+    .isDoneButton, .alreadyDoneButton{
+        height: 60%;
+        padding: 0 5pt;
+        font-size: 13pt;
+    }
+    .isDoneButton:hover, .alreadyDoneButton:hover{
+        font-size: 15px;
+    }
+    .deleteItem{
         font-size: 12pt;
     }
  }
