@@ -1,16 +1,16 @@
-*{
+* {
     font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
     margin: 0;
     padding: 0;
 }
 
-body{
+body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-header{
+header {
     background-color: rgb(1, 99, 74);
     color: white;
     font-size: 35pt;
@@ -20,18 +20,18 @@ header{
     letter-spacing: 2px;
 }
 
-main{
+main {
     flex: 1 0 auto;
 }
 
-hr{
+hr {
     border: none;
     background-color: rgb(226, 226, 226);
     height: 1px;
     letter-spacing: 1px;
 }
 
-footer{
+footer {
     flex: 0 0 auto;
     font-size: 13pt;
     left: 0;
@@ -39,11 +39,11 @@ footer{
     width: 100%;
 }
 
-footer p{
-    padding: 13pt 10pt;  
+footer p {
+    padding: 13pt 10pt;
 }
 
-.list{
+.list {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,84 +52,84 @@ footer p{
     min-width: 30%;
 }
 
-h2{
+h2 {
     font-size: 25pt;
     font-weight: 100;
 }
 
- #formAdd{
+#formAdd {
     display: flex;
     flex-direction: column;
     width: 100%;
     align-items: center;
- }
+}
 
- .addBox{
+.addBox {
     display: flex;
     flex-direction: column;
     width: 100%;
     align-items: center;
- }
+}
 
- .addInput{
+.addInput {
     width: 80%;
     height: 30pt;
     padding: 5pt 5pt;
     font-size: 20pt;
     border-radius: 5px;
     border: 1pt solid black;
- }
+}
 
- .currentDate{
+.currentDate {
     margin: 5pt 3pt;
-    padding: 3pt pt;
+    padding: 3pt;
     font-size: 13pt;
- }
+}
 
- .addPanel{
+.addPanel {
     display: flex;
     padding: 10pt 0;
     width: 80%;
     justify-content: space-between;
- }
+}
 
- .addButton{
+.addButton {
     font-size: 15pt;
     padding: 3pt 3pt;
- }
+}
 
- .formItem{
+.formItem {
     width: 100%;
- }
+}
 
- .item {
+.item {
     display: flex;
     flex-direction: row;
-    margin: 5pt 0;
     width: 80%;
+    margin: 5pt 0;
     border: 1pt solid black;
     border-radius: 5px;
 }
 
-#hiddenItemsList{
-   display: none;
-   flex-direction: column;
-   align-items: center;
-   width: 100%;
-   height: 100%;
+#hiddenItemsList {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
-#dropDoneList{
-   margin: 10pt 5pt;
-   font-size: 20pt;
-   padding: 5pt 5pt;
-   background-color: rgb(1, 99, 74);
-   color: white;
-   border: none;
-   border-radius: 5px;
+#dropDoneList {
+    margin: 10pt 5pt;
+    font-size: 20pt;
+    padding: 5pt 5pt;
+    background-color: rgb(1, 99, 74);
+    color: white;
+    border: none;
+    border-radius: 5px;
 }
 
-.editItem{
+.editItem {
     padding: 5pt 5pt;
     height: 100%;
     width: 100%;
@@ -139,18 +139,18 @@ h2{
     border: 0;
     text-align: start;
     text-transform: capitalize;
- }
+}
 
 .editItem:hover {
     background-color: rgba(175, 180, 174, 0.21);
- }
+}
 
- .isDonePanel{
+.isDonePanel {
     display: flex;
     align-items: center;
- }
+}
 
- .isDoneButton{
+.isDoneButton {
     height: 80%;
     border: 0;
     border-radius: 50%;
@@ -161,19 +161,19 @@ h2{
     color: rgb(255, 255, 255);
     padding: 0 8pt;
     margin: 0 2pt;
- }
+}
 
- .isDoneButton:active{
+.isDoneButton:active {
     box-shadow: 0 0 2px darkslategray;
     transform: translateY(2px);
- }
+}
 
- .isDoneButton:hover{
+.isDoneButton:hover {
     background-color: rgba(18, 201, 155, 0.589);
     font-size: 20px;
- }
+}
 
- .alreadyDoneButton{
+.alreadyDoneButton {
     height: 80%;
     border: 0;
     border-radius: 50%;
@@ -184,19 +184,19 @@ h2{
     color: rgb(255, 255, 255);
     padding: 0 8pt;
     margin: 0 2pt;
- }
+}
 
- .alreadyDoneButton:active{
+.alreadyDoneButton:active {
     box-shadow: 0 0 2px darkslategray;
     transform: translateY(2px);
- }
+}
 
- .alreadyDoneButton:hover{
+.alreadyDoneButton:hover {
     background-color: rgb(144, 78, 209);
     font-size: 20px;
- }
+}
 
- .deleteItem{
+.deleteItem {
     padding: 5pt 5pt;
     font-size: 15pt;
     background-color: rgba(255, 87, 87, 0.295);
@@ -204,46 +204,57 @@ h2{
     border-radius: 5px;
     height: 100%;
     transition: 0.3s;
- }
+}
 
- .deleteItem:active{
+.deleteItem:active {
     transform: translateY(1px);
- }
+}
 
- .deleteItem:hover {
+.deleteItem:hover {
     background-color: rgba(255, 87, 87, 0.180);
     font-size: 19px;
- }
- 
+}
 
- @media screen and (max-width: 500px) {
-    header{
+
+@media screen and (max-width: 500px) {
+    header {
         font-size: 25pt;
     }
-    h2{
+
+    h2 {
         font-size: 18pt;
     }
-    .item{
+
+    .item {
         width: 90%;
     }
-    .addButton{
+
+    .addButton {
         font-size: 13pt;
         padding: 0 2pt;
     }
-    .editItem{
+
+    .editItem {
         font-size: 14pt;
     }
-    .isDoneButton, .alreadyDoneButton{
+
+    .isDoneButton, .alreadyDoneButton {
         height: 60%;
         padding: 0 5pt;
         font-size: 13pt;
     }
-    .isDoneButton:hover, .alreadyDoneButton:hover{
+
+    .isDoneButton:hover, .alreadyDoneButton:hover {
         font-size: 15px;
     }
-    .deleteItem{
+
+    .deleteItem {
         font-size: 12pt;
     }
- }
+
+    .list {
+        font-size: medium;
+    }
+}
 
 
