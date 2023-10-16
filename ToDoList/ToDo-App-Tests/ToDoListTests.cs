@@ -1,6 +1,5 @@
 ﻿using Moq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using ToDo_Domain_Entities;
@@ -8,6 +7,7 @@ using ToDoList_Mvc_UI.Controllers;
 using ToDoList_Mvc_UI.Models.Repo;
 using Xunit;
 using Assert = Xunit.Assert;
+using ViewResult = Microsoft.AspNetCore.Mvc.ViewResult;
 
 namespace ToDo_App_Tests
 {
@@ -16,8 +16,8 @@ namespace ToDo_App_Tests
         [Fact]
         public void Index_ReturnAViewResult_WithAllTasks()
         {
-            var mock = new Mock<IToDoListRepository>();
-            mock.Setup(repo => repo.ToDoLists).Returns(new ToDoList[]
+            var mockToDoList = new Mock<IToDoListRepository>();
+            mockToDoList.Setup(repo => repo.ToDoLists).Returns(new ToDoList[]
                     {
                         new ToDoList
                         {   
@@ -26,7 +26,8 @@ namespace ToDo_App_Tests
                             IsDone = true,
                             CreateDate = DateTime.Now,
                             DueDate = DateTime.Now,
-                            Description = "running for 10min"
+                            Description = "running for 10min", 
+                            UserId = new Guid("bb3e98af-5558-4a79-abed-f3bf847870f5")
                         },
                         new ToDoList
                         {
@@ -35,7 +36,8 @@ namespace ToDo_App_Tests
                             IsDone = false,
                             CreateDate = DateTime.Now.AddDays(1),
                             DueDate = DateTime.Now.AddDays(5),
-                            Description = "swimming once per day"
+                            Description = "swimming once per day",
+                            UserId = new Guid("bb3e98af-5558-4a79-abed-f3bf847870f5")
                         },
                         new ToDoList
                         {
@@ -44,51 +46,61 @@ namespace ToDo_App_Tests
                             IsDone = false,
                             CreateDate = DateTime.Now,
                             DueDate = DateTime.Now,
-                            Description = ""
+                            Description = "",
+                            UserId = new Guid("57b4bb4a-38db-447f-a5ab-c857da51198c")
                         }
                       }.AsQueryable());
+            
+            var mockUser = new Mock<IUserRepository>();
 
-            var controller = new HomeController(mock.Object);
+            var controller = new HomeController(mockToDoList.Object, mockUser.Object);
 
-            var result = controller.Index();
+            var result = controller.Index(new Guid("bb3e98af-5558-4a79-abed-f3bf847870f5")) as ViewResult;
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<IQueryable<ToDoList>>(
                 viewResult.ViewData.Model);
-            Assert.Equal(3, model.Count());
+            Assert.Equal(2, model.Count());
+            mockToDoList.Verify();
         }
 
         [Fact]
         public void AddItem_RedirectToIndex()
         {
-            var mock = new Mock<IToDoListRepository>();
-            mock.Setup(repo => repo.AddItem(It.IsAny<ToDoList>())).Verifiable();
-            var controller = new HomeController(mock.Object);
+            var mockToDoList = new Mock<IToDoListRepository>();
+            var mockUser = new Mock<IUserRepository>();
+
+            mockToDoList.Setup(repo => repo.AddItem(It.IsAny<ToDoList>()))
+                .Returns<ToDoList>(arg => arg);
+
+            var controller = new HomeController(mockToDoList.Object, mockUser.Object);
             var newTask = new ToDoList
             {
-                Id = 1,
-                Name = "Running",
+                Name = "Dancing",
                 IsDone = true,
                 CreateDate = DateTime.Now,
                 DueDate = DateTime.Now,
-                Description = "running for 10min"
+                Description = "learn dancing",
+                UserId = new Guid("bb3e98af-5558-4a79-abed-f3bf847870f5")
             };
 
-            var result = controller.AddItem(newTask);
+            var result = controller.AddItem(newTask.UserId.ToString(), newTask);
 
-            var redirect = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Null(redirect.ControllerName);
-            Assert.Equal("Index", redirect.ActionName);
-            mock.Verify();
+            var redirectToActionResult = 
+                Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Index", redirectToActionResult.ActionName);
+            mockToDoList.Verify();
         }
 
         [Fact]
         public void AddItem_BadRequest()
         {
-            var mock = new Mock<IToDoListRepository>();
+            var mockToDoList = new Mock<IToDoListRepository>();
+            mockToDoList.Setup(repo => repo.AddItem(It.IsAny<ToDoList>())).Verifiable();
 
-            var controller = new HomeController(mock.Object);
-            controller.ModelState.AddModelError("Name", "Required");
+            var mockUser = new Mock<IUserRepository>();
+
+            var controller = new HomeController(mockToDoList.Object, mockUser.Object);
             var newTask = new ToDoList
             {
                 Id = 1,
@@ -96,21 +108,28 @@ namespace ToDo_App_Tests
                 IsDone = true,
                 CreateDate = DateTime.Now,
                 DueDate = DateTime.Now,
-                Description = "running for 10min"
+                Description = "running for 10min",
+                UserId = new Guid("bb3e98af-5558-4a79-abed-f3bf847870f5")
             };
 
-            var result = controller.AddItem(newTask);
+            var result = controller.AddItem(newTask.UserId.ToString(), newTask) ;
 
-            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.IsType<SerializableError>(badRequest.Value);
+            var redirectToActionResult = 
+                Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectToActionResult.ActionName);
+            mockToDoList.Verify();
         }
 
         [Fact]
         public void UpdateItem_RedirectToIndex()
         {
-            var mock = new Mock<IToDoListRepository>();
-            mock.Setup(repo => repo.UpdateItem(It.IsAny<ToDoList>())).Verifiable();
-            var controller = new HomeController(mock.Object);   
+            var mockToDoList = new Mock<IToDoListRepository>();
+            var mockUser = new Mock<IUserRepository>();
+
+            mockToDoList.Setup(repo => repo.UpdateItem(It.IsAny<ToDoList>()))
+                .Returns<ToDoList>(arg => arg);
+            
+            var controller = new HomeController(mockToDoList.Object, mockUser.Object);   
             var editTask = new ToDoList
             {
                 Id = 1,
@@ -118,24 +137,28 @@ namespace ToDo_App_Tests
                 IsDone = true,
                 CreateDate = DateTime.Now,
                 DueDate = DateTime.Now,
-                Description = "running for 10min"
+                Description = "running for 10min",
+                UserId = new Guid("bb3e98af-5558-4a79-abed-f3bf847870f5")
             };
 
-            var result = controller.UpdateItem(editTask);
+            var result = controller.UpdateItem(editTask.UserId.ToString(), editTask);
 
-            var redirect = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Null(redirect.ControllerName);
-            Assert.Equal("Index", redirect.ActionName);
-            mock.Verify();
+            var redirectToActionResult = 
+                Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Index", redirectToActionResult.ActionName);
+            mockToDoList.Verify();
         }
         
         [Fact]
         public void UpdateItem_BadRequest()
         {
-            var mock = new Mock<IToDoListRepository>();
+            var mockToDoList = new Mock<IToDoListRepository>();
+            mockToDoList.Setup(repo => repo.UpdateItem(It.IsAny<ToDoList>())).Verifiable();
 
-            var controller = new HomeController(mock.Object);
-            controller.ModelState.AddModelError("Name", "Required");
+            var mockUser = new Mock<IUserRepository>();
+            mockUser.Setup(repo => repo.AddUser(It.IsAny<User>())).Verifiable();
+            
+            var controller = new HomeController(mockToDoList.Object, mockUser.Object); 
             var newTask = new ToDoList
             {
                 Id = 1,
@@ -143,45 +166,56 @@ namespace ToDo_App_Tests
                 IsDone = true,
                 CreateDate = DateTime.Now,
                 DueDate = DateTime.Now,
-                Description = "running for 10min"
+                Description = "running for 10min",
+                UserId = new Guid("bb3e98af-5558-4a79-abed-f3bf847870f5")
             };
 
-            var result = controller.UpdateItem(newTask);
+            var result = controller.UpdateItem(newTask.UserId.ToString(), newTask);
 
-            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.IsType<SerializableError>(badRequest.Value);
+            var redirectToActionResult = 
+                Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectToActionResult.ActionName);
+            mockToDoList.Verify();
         }
         
         [Fact]
         public void DeleteItem_RedirectToIndex()
         {
-            var mock = new Mock<IToDoListRepository>();
-            mock.Setup(repo => repo.DeleteItem(It.IsAny<long>())).Verifiable();
-            var controller = new HomeController(mock.Object);
-            var deleteId = (long)11;
+            var mockToDoList = new Mock<IToDoListRepository>();
+            var mockUser = new Mock<IUserRepository>();
 
-            var result = controller.DeleteItem(deleteId);
+            mockToDoList.Setup(repo => repo.DeleteItem(It.IsAny<long>()))
+                .Returns(1);
 
-            var redirect = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Null(redirect.ControllerName);
-            Assert.Equal("Index", redirect.ActionName);
-            mock.Verify();
+            var controller = new HomeController(mockToDoList.Object, mockUser.Object);
+            var deleteId = (long)1;
+
+            var result = controller.DeleteItem(deleteId,"bb3e98af-5558-4a79-abed-f3bf847870f5");
+
+            var redirectToActionResult = 
+                Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Index", redirectToActionResult.ActionName);
+            mockToDoList.Verify();
         }
 
         [Fact]
         public void ToggleIsDone_RedirectToIndex()
-        {
-            var mock = new Mock<IToDoListRepository>();
-            mock.Setup(repo => repo.UpdateDoneItem(It.IsAny<long>())).Verifiable();
-            var controller = new HomeController(mock.Object);
-            var toggleItem = (long)11;
+        { 
+            var mockToDoList = new Mock<IToDoListRepository>();
+            var mockUser = new Mock<IUserRepository>();
 
-            var result = controller.ToggleIsDone(toggleItem);
+            mockToDoList.Setup(repo => repo.UpdateDoneItem(It.IsAny<long>()))
+                .Returns<long>(arg => arg);
 
-            var redirect = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Null(redirect.ControllerName);
-            Assert.Equal("Index", redirect.ActionName);
-            mock.Verify();
+            var controller = new HomeController(mockToDoList.Object, mockUser.Object);
+            var toggleItem = (long)1;
+
+            var result = controller.ToggleIsDone(toggleItem, "bb3e98af-5558-4a79-abed-f3bf847870f5");
+
+            var redirectToActionResult = 
+                Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Index", redirectToActionResult.ActionName);
+            mockToDoList.Verify();
         }
     }
 }

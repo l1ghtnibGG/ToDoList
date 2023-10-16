@@ -9,5 +9,6 @@ namespace ToDoList_Mvc_UI.Models
             : base(options) { }
 
         public DbSet<ToDoList> ToDoLists { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

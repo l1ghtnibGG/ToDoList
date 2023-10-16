@@ -17,17 +17,13 @@ namespace ToDoList_Mvc_UI.Models.Repo
 
         public ToDoList AddItem(ToDoList item)
         {
-            item.CreateDate = DateTime.Now;
+            if (item == null)
+                return null;
             
-            if (item != null)
-            {
+            item.CreateDate = DateTime.Now;
+
             _context.Add(item);
             _context.SaveChanges();
-            }
-            else
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
 
             return item;
         }
@@ -36,15 +32,11 @@ namespace ToDoList_Mvc_UI.Models.Repo
         {
             var id = _context.ToDoLists.FirstOrDefault(x => x.Id == item.Id).Id;
 
-            if (id > 0)
-            {
-                _context.ToDoLists.Update(item);
-                _context.SaveChanges();
-            }
-            else
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            if (id <= 0)
+                return null;
+            
+            _context.ToDoLists.Update(item);
+            _context.SaveChanges();
 
             return item;
         }
@@ -53,21 +45,21 @@ namespace ToDoList_Mvc_UI.Models.Repo
         {
             var item = _context.ToDoLists.FirstOrDefault(x => x.Id == id);
 
-            if (item != null)
-            {
-                _context.ToDoLists.Remove(item);
-                _context.SaveChanges();
-            }
-            else
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            if (item == null)
+                return 0;
+            
+            _context.ToDoLists.Remove(item);
+            _context.SaveChanges();
+
             return id;
         }
 
         public long UpdateDoneItem(long id)
         {
             var item = _context.ToDoLists.FirstOrDefault(x => x.Id == id);
+            
+            if (item == null)
+                return 0;
 
             item.IsDone = !item.IsDone;
             item.DueDate = DateTime.Now;

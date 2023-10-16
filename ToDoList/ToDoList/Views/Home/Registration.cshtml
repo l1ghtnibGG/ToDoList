@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Registration";
+}
+
+<link rel="stylesheet" href="~/css/login.css"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+@model UserRegistration;
+
+<div class="container mt-5 g-0">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-6 rounded p-5 shadow-lg">
+            <h1 class="mb-3 text-center">Registration</h1>
+            <form method="post" asp-controller="Home" asp-action="Registration">
+                <div class="mb-3">
+                    <label class="form-label" asp-for="@Model.EmailAddress">Email adress</label>
+                    <input type="email" asp-for="@Model.EmailAddress" class="form-control" />
+                    <span asp-validation-for="@Model.EmailAddress" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="@Model.Name">Name</label>
+                    <input type="text" asp-for="@Model.Name" class="form-control" />
+                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="@Model.Password">Password</label>
+                    <input type="password" asp-for="@Model.Password" class="form-control" />
+                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" asp-for="@Model.ConfirmPassword">Confirm password</label>
+                    <input type="password" asp-for="@Model.ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-outline-primary w-50 p-2 fs-5 text-break">Registration</button>
+                </div>
+            </form>
+            <form method="get" asp-controller="Home" asp-action="Login">
+                <div class="mt-4 text-center">
+                    <button class="btn btn-lg btn-outline-dark w-50 p-2 fs-5">Log In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using ToDoList_Mvc_UI.Models;
 using ToDoList_Mvc_UI.Models.Repo;
 
@@ -32,7 +33,9 @@ namespace ToDoList_Mvc_UI
             });
 
             services.AddScoped<IToDoListRepository, EFToDoListRepository>();
-
+            services.AddScoped<IUserRepository, EFUserRepository>();
+            
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             services.AddControllersWithViews();
         }
 
@@ -43,8 +46,12 @@ namespace ToDoList_Mvc_UI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -52,7 +59,8 @@ namespace ToDoList_Mvc_UI
                     "Edit/{id:long}",
                     new { controller = "Home", action = "EditPage", id = 0 });
                 endpoints.MapControllerRoute("default",
-                    pattern: "{controller=Home}/{action=Index}");
+                    "Login",
+                    new {controller="Home", action="Login", id = 0});
             });
 
             SeedData.EnsureData(app);

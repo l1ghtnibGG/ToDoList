@@ -19,5 +19,8 @@ namespace ToDo_Domain_Entities
         public DateTime DueDate { get; set; }
 
         public string Description { get; set; }
+        
+        public Guid? UserId { get; set; }
+        public User User { get; set; }
     }
 }

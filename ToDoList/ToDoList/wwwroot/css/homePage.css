@@ -11,6 +11,8 @@ body {
 }
 
 header {
+    display: flex;
+    flex-direction: row;
     background-color: rgb(1, 99, 74);
     color: white;
     font-size: 35pt;
@@ -18,6 +20,12 @@ header {
     text-align: left;
     padding: 10pt;
     letter-spacing: 2px;
+}
+
+#logOut{
+    margin: auto 0 auto auto;
+    font-size: 20pt;
+    font-weight: 100;
 }
 
 main {

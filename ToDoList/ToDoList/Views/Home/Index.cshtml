@@ -1,18 +1,18 @@
 ﻿@{
-    Layout = "_Layout";
+    ViewData["Title"] = "ToDoList";
 }
-
 @model IQueryable<ToDoList>
 
 <div class="addBox">
-    <form asp-controller="Home" asp-action="AddItem" method="post" id="formAdd">
+    <form method="post" asp-controller="Home" asp-action="AddItem" asp-route-id="@User.Claims.First().Value" id="formAdd">
         
         <input type="text" name="toDoList.Name" id="addInput" class="addInput" required min="1" placeholder="Add" />
         
         <div class="addPanel">
             <button class="addButton">Add</button>
-                <input type="date" name="toDoList.DueDate" id="currentDate" class="currentDate"
-                min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+            <input type="date" name="toDoList.DueDate" id="currentDate" class="currentDate"
+                   min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+            <input type="hidden" name="toDoList.UserId" value="@User.Claims.First().Value"/>
         </div>
     </form>
 </div>
@@ -23,23 +23,24 @@
 {
     @if(!x.IsDone){
         <div class="item">
-            <form method="get" asp-controller="Home" asp-action="EditPage" class="formItem">
+            <form method="post" asp-controller="Home" asp-action="EditPage" 
+                  asp-route-id="@x.Id" asp-route-userId="@User.Claims.FirstOrDefault().Value" class="formItem">
                 <input type="hidden" name="id" value="@x.Id"/>
                 <input type="hidden" name="toDoList.Name" value="@x.Name" />
                 <input type="hidden" name="toDoList.IsDone" value="@x.IsDone" />
                 <input type="hidden" name="toDoList.CreateDate" value="@x.CreateDate.ToString("yyyy-MM-dd")" />
                 <input type="hidden" name="toDoList.DueDate" value="@x.DueDate.ToString("yyyy-MM-dd")" />
                 <input type="hidden" name="toDoList.Description" value="@x.Description" />
+                <input type="hidden" name="toDoList.UserId" value="@User.Claims.FirstOrDefault().Value"/>
 
                 <button class="editItem">@x.Name</button>
             </form>
-            <form method="post" asp-controller="Home" asp-action="ToggleIsDone" class="isDonePanel">
-                <input type="hidden" name="id" value="@x.Id" />
+            <form method="post" asp-controller="Home" asp-action="ToggleIsDone" asp-route-id="@x.Id" 
+                  asp-route-userId="@x.UserId" class="isDonePanel">
                 <button class="isDoneButton">&#10003</button>
             </form>
-            <form method="post" asp-controller="Home" asp-action="DeleteItem">
-                <input type="hidden" name="id" value="@x.Id" />
-                <button class="deleteItem" >delete</button>
+            <form method="post" asp-controller="Home" asp-action="DeleteItem" asp-route-id="@x.Id" asp-route-userId="@x.UserId">
+                <button class="deleteItem">delete</button>
             </form>
         </div>
     }
@@ -48,30 +49,54 @@
 <button id="dropDoneList" onclick="hideDoneItem(this.id)">Done @Model.Where(x => x.IsDone).Count()</button>
 
 <div class="hiddenItemsList" id="hiddenItemsList">
-@foreach (var x in Model)
-{
-    @if (x.IsDone)
+    @foreach (var x in Model)
     {
-        <div class="item">
-            <form method="get" asp-controller="Home" asp-action="EditPage" class="formItem">
-                <input type="hidden" name="id" value="@x.Id" />
-                <input type="hidden" name="toDoList.Name" value="@x.Name" />
-                <input type="hidden" name="toDoList.IsDone" value="@x.IsDone" />
-                <input type="hidden" name="toDoList.CreateDate" value="@x.CreateDate.ToString("yyyy-MM-dd")" />
-                <input type="hidden" name="toDoList.DueDate" value="@x.DueDate.ToString("yyyy-MM-dd")" />
-                <input type="hidden" name="toDoList.Description" value="@x.Description" />
+        @if (x.IsDone)
+        {
+            <div class="item">
+                <form method="post" asp-controller="Home" asp-action="EditPage" 
+                       asp-route-id="@x.Id" asp-route-userId="@User.Claims.FirstOrDefault().Value" class="formItem">
+                    <input type="hidden" name="id" value="@x.Id" />
+                    <input type="hidden" name="toDoList.Name" value="@x.Name" />
+                    <input type="hidden" name="toDoList.IsDone" value="@x.IsDone" />
+                    <input type="hidden" name="toDoList.CreateDate" value="@x.CreateDate.ToString("yyyy-MM-dd")" />
+                    <input type="hidden" name="toDoList.DueDate" value="@x.DueDate.ToString("yyyy-MM-dd")" />
+                    <input type="hidden" name="toDoList.Description" value="@x.Description" />
+                    <input type="hidden" name="toDoList.UserId" value="@User.Claims.FirstOrDefault().Value"/>
 
-                <button class="editItem">@x.Name</button>
-            </form>
-            <form method="post" asp-controller="Home" asp-action="ToggleIsDone" class="isDonePanel">
-                <input type="hidden" name="id" value="@x.Id" />
-                <button class="alreadyDoneButton">&#10003</button>
-            </form>
-            <form method="post" asp-controller="Home" asp-action="DeleteItem">
-                <input type="hidden" name="id" value="@x.Id" />
-                <button class="deleteItem">delete</button>
-            </form>
-        </div>
+                    <button class="editItem">@x.Name</button>
+                </form>
+                <form method="post" asp-controller="Home" asp-action="ToggleIsDone" asp-route-id="@x.Id" 
+                      asp-route-userId="@x.UserId" class="isDonePanel">
+                    <button class="alreadyDoneButton">&#10003</button>
+                </form>
+                <form method="post" asp-controller="Home" asp-action="DeleteItem" asp-route-id="@x.Id" asp-route-userId="@x.UserId">
+                    <button class="deleteItem">delete</button>
+                </form>
+            </div>
+        }
     }
-}
 </div>
+<script>
+    $("isDoneButton").click(function () {
+      $(this).toggleClass("alreadyDoneButton");
+    }); 
+
+    window.onload = function() {
+        var show = localStorage.getItem('show');
+        if (show === 'true'){
+            document.getElementById('hiddenItemsList').style.display = 'flex';
+        }
+    }
+
+    function hideDoneItem(obj){
+        if (document.getElementById('hiddenItemsList').style.display == "flex"){
+            document.getElementById('hiddenItemsList').style.display = "none";
+             localStorage.setItem('show', 'false');
+        }
+        else{
+            document.getElementById('hiddenItemsList').style.display = "flex";
+             localStorage.setItem('show', 'true');
+        }
+    }
+</script>
